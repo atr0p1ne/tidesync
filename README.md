@@ -9,8 +9,6 @@ TideSync is a lightweight Fish module for synchronizing directories with `rsync`
 
 ## Installation
 
-### Installation
+1. Install Fisher plugin manager (https://github.com/jorgebucaran/fisher)
 
-1. Install Fisher plugin manager - https://github.com/jorgebucaran/fisher
-
-2. fisher install atr0p1ne/tidesync
+2. run: fisher install atr0p1ne/tidesync
