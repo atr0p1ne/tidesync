@@ -1,0 +1,13 @@
+[TIDESYNC]
+REMOTE_HOST = "alexandria"
+REMOTE_USER = "atr0p1ne"
+
+[RSYNC]
+OPTIONS = "--archive --verbose --compress --human-readable --progress"
+
+[DIRS]
+
+[DIRS.PHOTOS]
+LOCAL = "~/Pictures"
+REMOTE = "~/Pictures"
+EXCLUDE = "*.tmp,*.log"
