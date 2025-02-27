@@ -1,4 +1,4 @@
-TideSync
+TideSync (AUR package)
 
 WORK IN PROGRESS
 
