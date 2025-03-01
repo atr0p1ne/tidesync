@@ -11,11 +11,9 @@ function load_config
     # Function to extract key-value pairs from a TOML section
     function get_toml_value
         set key $argv[1]
-        # Improved regex: it captures values that are either in quotes or not, while ignoring inline comments
-        set value (grep -oP "(?<=^$key\s*=\s*)\"?([^\"]+)\"?" $config_file)
+        set value (grep -oP "^$key\s*=\s*\"?([^\"]+)\"?" $config_file | sed 's/^.*=\s*"\([^"]*\)".*/\1/')
         echo $value
     end
-
 
     # Parse the TIDESYNC section
     set -g tidesync_remote_host (get_toml_value "REMOTE_HOST")
