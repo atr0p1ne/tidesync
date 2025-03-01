@@ -20,18 +20,10 @@ function load_config
     set -g tidesync_remote_user (get_toml_value "REMOTE_USER")
     set -g tidesync_rsync_default (get_toml_value "RSYNC-DEFAULT")
 
-    # Output TIDESYNC section values
-    echo "TIDESYNC Configuration:"
-    echo "Remote Host: $tidesync_remote_host"
-    echo "Remote User: $tidesync_remote_user"
-    echo "Rsync Default Options: $tidesync_rsync_default"
-
     # Loop through each section under [DIRS] and extract information
     set dirs (grep -oP "(?<=^\[DIRS\.)[A-Za-z0-9_]+" $config_file)  # Get all directory section names under [DIRS]
     
     for dir in $dirs
-        echo "DIRS Configuration ($dir):"
-        
         # Getting local directory value and replacing ~ with the home directory
         set -g $dir_local_dir (get_toml_value "DIRS.$dir.LOCAL" | sed 's|~|'(echo $HOME)|')
         
@@ -40,12 +32,7 @@ function load_config
         
         # Getting exclude patterns
         set -g $dir_exclude_patterns (get_toml_value "DIRS.$dir.EXCLUDE")
-        
-        # Output values
-        echo "Local Directory: $dir_local_dir"
-        echo "Remote Directory: $dir_remote_dir"
-        echo "Exclude Patterns: $dir_exclude_patterns"
-        echo ""  # Blank line for better readability
+
     end
 
 end

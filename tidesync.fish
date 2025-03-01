@@ -8,24 +8,17 @@ function tidesync
     #Load configuration (user, server and specified directories)
     load_config
 	
-	
-	# 4. Check if the user provided a command argument (pull or push)
-	set sync_action $argv[1]
+     for dir in $TIDESYNC_DIRS
+            set local_dir $$dir_LOCAL
+            set remote_dir $$dir_REMOTE
 
-	# If no argument is provided, ask the user to choose either "pull" or "push"
-	if test -z $sync_action
-	    echo "No sync action specified."
-	    set sync_action (choose "Choose action:" "pull" "push")
-	end
+            echo "Syncing: $TIDESYNC_REMOTE_USER@$TIDESYNC_REMOTE_HOST:$remote_dir = $local_dir"
+            rsync $TIDESYNC_REMOTE_USER@$TIDESYNC_REMOTE_HOST:$remote_dir/ $local_dir
 
-	# 5. Perform the sync operation based on the argument (pull or push)
-	switch $sync_action
-	    case "pull"
-		pull
-	    case "push"
-		push
-	    case "*"
-		echo "Error: Invalid action '$sync_action'. Use 'pull' or 'push'."
-		return 1
-	end
+            if test $status -eq 0
+                echo "[$(date)] Sync from $dir completed successfully." >> $TIDESYNC_LOG_FILE
+            else
+                echo "[$(date)] Sync from $dir failed!" >> $TIDESYNC_LOG_FILE
+            end
+     end
 end
