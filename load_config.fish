@@ -49,9 +49,4 @@ function load_config
     end
 
 end
-
-# Call the function to parse the config
-parse_tidesync
-
     
-end
