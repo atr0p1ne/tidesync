@@ -26,13 +26,14 @@ build() {
 
 # Install the package
 package() {
-  cd "$srcdir"
-  mkdir -p "$pkgdir/usr/share/tidesync"
-  mkdir -p "$pkgdir/usr/share/fish/functions"
-  
-  cp -r "$srcdir/usr/share/tidesync/*" "$pkgdir/usr/share/tidesync/*"
-  cp "$srcdir/usr/share/fish/functions/tidesync.fish" "$pkgdir/usr/share/fish/functions/tidesync.fish"
- 
+    cd "$srcdir"
+    install -Dm755 "$srcdir/tidesync/fish/functions/tidesync.fish" "$pkgdir/usr/share/fish/functions/tidesync.fish"
+
+    # Install each .fish script inside tidesync/
+    install -Dm755 "$srcdir/tidesync/tidesync/"*.fish "$pkgdir/usr/share/tidesync/"
+
+    # Install config.toml as well
+    install -Dm644 "$srcdir/tidesync/tidesync/config.toml" "$pkgdir/usr/share/tidesync/config.toml"
 }
 
 # Optional: Clean up unnecessary files
