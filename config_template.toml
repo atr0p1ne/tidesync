@@ -1,6 +1,6 @@
 [TIDESYNC]
-REMOTE_HOST = "alexandria"
-REMOTE_USER = "atr0p1ne"
+REMOTE_HOST = "hostname"
+REMOTE_USER = "username"
 
 [RSYNC]
 OPTIONS = "--archive --verbose --compress --human-readable --progress"
