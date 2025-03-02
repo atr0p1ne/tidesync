@@ -2,8 +2,12 @@
 function tidesync
     argparse --name=tidesync 'd/debug' 's/sync' -- $argv
 
+    if set -q _flag_d
+        set -g _flag_d  # Make it global so it's available in other functions
+    end
+
     function echo_debug
-        if set -q _flag_debug
+        if set -q _flag_d
             echo "$argv[1]"
         else
         end
