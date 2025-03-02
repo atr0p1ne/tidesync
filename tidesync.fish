@@ -1,6 +1,16 @@
 #!/usr/bin/env fish
 function tidesync
-    # Load all necessary inernal functions inside this main function, so it does not clutter up fish shell
+    argparse --name=tidesync 'd/debug' 's/sync' -- $argv
+
+    function echo_debug
+        if set -q _flag_debug
+            echo "$argv[1]"
+        else
+    end
+
+    # Load all necessary inernal functions inside this main function,
+    # so it does not clutter up fish shell
+    echo_debug "Starting to load functions from /usr/share/tidesync/*.fish"
     for f in /usr/share/tidesync/*.fish
         source $f
     end
