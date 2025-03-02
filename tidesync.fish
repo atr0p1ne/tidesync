@@ -27,7 +27,7 @@ function tidesync
     echo_debug "Loading configuration file..."
     load_config
 	
-	if set -q _flag_d
+	if set -q _flag_s
 	    echo_debug "Start syncing directories..."
         for dir in $TIDESYNC_DIRS
             echo_debug "Syncing $dir..."

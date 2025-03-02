@@ -1,5 +1,5 @@
 function load_config
-    set config_file ~/.config/tidesync/config.toml
+    set -g config_file ~/.config/tidesync/config.toml
 
     # Check if the user config exists
     if not test -f $user_config_file
