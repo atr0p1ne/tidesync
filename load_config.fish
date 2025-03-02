@@ -23,8 +23,61 @@ function load_config
     echo_debug "Remote Host - $remote_host, Remote User - $remote_user"
     echo_debug "Rsync default - $rsync_options"
     
+   # Read the config file and extract the directory sections
+    # Extract the part after [DIRS.PHOTOS], etc.
+    for line in (cat $config_user)
+        # Trim whitespace and ignore empty lines or comments
+        set line (string trim $line)
+        if test -z "$line" -o "$line" = "#"* # Skip empty or comment lines
+            continue
+        end
+        
+        # Match the section header like [DIRS.PHOTOS] using ripgrep
+        if echo $line | rg -q '^\[DIRS\.' 
+            # Extract the directory name using ripgrep and sed
+            set dir_name (echo $line | sed 's/^\[DIRS\.\(.*\)\]$/\1/')
+            
+            # Initialize the local, remote, and exclude variables for this directory
+            set local_path ""
+            set remote_path ""
+            set exclude_pattern ""
+            
+            # Now extract LOCAL, REMOTE, EXCLUDE values for the current directory
+            while read line
+                set line (string trim $line) # Trim whitespace
+                if test -z "$line" -o "$line" = "#"* # Skip empty or comment lines
+                    continue
+                end
 
+                # If we reach the next section, stop reading
+                if echo $line | rg -q '^\[DIRS\.' 
+                    break
+                end
+                
+                # Check for the LOCAL, REMOTE, EXCLUDE keys using ripgrep
+                if echo $line | rg -q '^LOCAL'
+                    set local_path (echo $line | sed 's/^LOCAL\s*=\s*"\(.*\)"/\1/')
+                end
+                if echo $line | rg -q '^REMOTE'
+                    set remote_path (echo $line | sed 's/^REMOTE\s*=\s*"\(.*\)"/\1/')
+                end
+                if echo $line | rg -q '^EXCLUDE'
+                    set exclude_pattern (echo $line | sed 's/^EXCLUDE\s*=\s*"\(.*\)"/\1/')
+                end
+            end
+            
+            # Assign variables dynamically for each directory section (without brackets)
+            set DIRS_$dir_name_LOCAL $local_path
+            set DIRS_$dir_name_REMOTE $remote_path
+            set DIRS_$dir_name_EXCLUDE $exclude_pattern
+
+            # Optionally, print the variables for testing
+            echo "Local path for $dir_name: " $DIRS_$dir_name_LOCAL
+            echo "Remote path for $dir_name: " $DIRS_$dir_name_REMOTE
+            echo "Excludes for $dir_name: " $DIRS_$dir_name_EXCLUDE
+        end
     end
+    
 
 end
     
