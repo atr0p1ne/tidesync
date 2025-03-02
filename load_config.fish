@@ -5,34 +5,24 @@ function load_config
     # Check if the user config exists
     if not test -f $config_user
         # If the user config doesn't exist, copy the default from /usr/share/tidesync/
-        echo "User config not found. Copying config.toml to ~/.config/tidesync/config.toml"
+        echo "User config not found. Copying config_default.toml to ~/.config/tidesync/config.toml"
         install -Dm644 $config_template $config_user 
     end
     
     # Function to extract key-value pairs from a TOML section
     function get_toml_value
         set key $argv[1]
-        set value (rg -o '^\s*tidesync_user\s*=\s*"(.*?)"' $config_user | sed 's/^.*=\s*"\(.*\)"$/\1/')
+        set value (rg -o "^\s*$key\s*=\s*\"(.*?)\"" $config_user | sed 's/^.*=\s*"\(.*\)"$/\1/')
         echo $value
     end
 
     # Parse the TIDESYNC section
-    set -g tidesync_remote_host (get_toml_value "REMOTE_HOST")
-    set -g tidesync_remote_user (get_toml_value "REMOTE_USER")
-    set -g tidesync_rsync_default (get_toml_value "RSYNC-DEFAULT")
-
-    # Loop through each section under [DIRS] and extract information
-    set dirs (grep -oP "(?<=^\[DIRS\.)[A-Za-z0-9_]+" $config_file)  # Get all directory section names under [DIRS]
+    set -g remote_host (get_toml_value "REMOTE_HOST")
+    set -g remote_user (get_toml_value "REMOTE_USER")
+    set -g rsync_options (get_toml_value "OPTIONS")
+    echo_debug "Remote Host - $remote_host, Remote User - $remote_user"
+    echo_debug "Rsync default - $rsync_options"
     
-    for dir in $dirs
-        # Getting local directory value and replacing ~ with the home directory
-        #set -g $dir_local_dir (get_toml_value "DIRS.$dir.LOCAL" | sed 's|~|'(echo $HOME)|')
-        
-        # Getting remote directory value and replacing ~ with the home directory
-        #set -g $dir_remote_dir (get_toml_value "DIRS.$dir.REMOTE" | sed 's|~|'(echo $HOME)|')
-        
-        # Getting exclude patterns
-        set -g $dir_exclude_patterns (get_toml_value "DIRS.$dir.EXCLUDE")
 
     end
 
