@@ -11,7 +11,7 @@ function load_config
     # Function to extract key-value pairs from a TOML section
     function get_toml_value
         set key $argv[1]
-        set value (grep -oP "^$key\s*=\s*\"?([^\"]+)\"?" $config_file | sed 's/^.*=\s*"\([^"]*\)".*/\1/')
+        set value (rg -o '^\s*tidesync_user\s*=\s*"(.*?)"' $config_file | sed 's/^.*=\s*"\(.*\)"$/\1/')
         echo $value
     end
 
