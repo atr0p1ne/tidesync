@@ -5,7 +5,7 @@ function load_config
     if not test -f $config_file
         # If the user config doesn't exist, copy the default from /usr/share/tidesync/
         echo "User config not found. Copying config.toml to ~/.config/tidesync/config.toml"
-        install -Dm644 $config_file /path/to/destination/directory/target_file
+        install -Dm644 $config_file /etc/tidesync/config.toml
     end
     
     # Function to extract key-value pairs from a TOML section
