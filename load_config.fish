@@ -1,8 +1,8 @@
 function load_config
     set -g config_file ~/.config/tidesync/config.toml
-
+    
     # Check if the user config exists
-    if not test -f $user_config_file
+    if not test -f $config_file
         # If the user config doesn't exist, copy the default from /usr/share/tidesync/
         echo "User config not found. Copying config.toml to ~/.config/tidesync/config.toml"
         cp /etc/tidesync/config.toml $config_file
