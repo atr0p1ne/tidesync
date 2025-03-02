@@ -6,6 +6,7 @@ function tidesync
         if set -q _flag_debug
             echo "$argv[1]"
         else
+        end
     end
 
     # Load all necessary inernal functions inside this main function,
