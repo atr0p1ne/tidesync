@@ -1,17 +1,18 @@
 function load_config
-    set -g config_file ~/.config/tidesync/config.toml
+    set -g config_template /usr/share/tidesync/config_template.toml
+    set -g config_user ~/.config/tidesync/config.toml
     
     # Check if the user config exists
-    if not test -f $config_file
+    if not test -f $config_user
         # If the user config doesn't exist, copy the default from /usr/share/tidesync/
         echo "User config not found. Copying config.toml to ~/.config/tidesync/config.toml"
-        install -Dm644 /etc/tidesync/config.toml $config_file 
+        install -Dm644 $config_template $config_user 
     end
     
     # Function to extract key-value pairs from a TOML section
     function get_toml_value
         set key $argv[1]
-        set value (rg -o '^\s*tidesync_user\s*=\s*"(.*?)"' $config_file | sed 's/^.*=\s*"\(.*\)"$/\1/')
+        set value (rg -o '^\s*tidesync_user\s*=\s*"(.*?)"' $config_user | sed 's/^.*=\s*"\(.*\)"$/\1/')
         echo $value
     end
 
@@ -25,10 +26,10 @@ function load_config
     
     for dir in $dirs
         # Getting local directory value and replacing ~ with the home directory
-        set -g $dir_local_dir (get_toml_value "DIRS.$dir.LOCAL" | sed 's|~|'(echo $HOME)|')
+        #set -g $dir_local_dir (get_toml_value "DIRS.$dir.LOCAL" | sed 's|~|'(echo $HOME)|')
         
         # Getting remote directory value and replacing ~ with the home directory
-        set -g $dir_remote_dir (get_toml_value "DIRS.$dir.REMOTE" | sed 's|~|'(echo $HOME)|')
+        #set -g $dir_remote_dir (get_toml_value "DIRS.$dir.REMOTE" | sed 's|~|'(echo $HOME)|')
         
         # Getting exclude patterns
         set -g $dir_exclude_patterns (get_toml_value "DIRS.$dir.EXCLUDE")
